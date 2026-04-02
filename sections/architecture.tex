@@ -383,9 +383,8 @@ practice:
   strict-aliasing, and \texttt{H5PL\_\_open} casting issues together:
   \begin{enumerate}
     \item \textbf{Struct embedding.} Embed \texttt{H5Z\_class2\_t} as the first
-          member of \texttt{H5Z\_class3\_t} and bump \texttt{H5Z\_CLASS\_T\_VERS} to~2
-          (\texttt{H5Z\_class3\_t \{ H5Z\_class2\_t base; set\_config\_t set\_config;
-          get\_config\_t get\_config; \}}).
+          member of \texttt{H5Z\_class3\_t} and bump \texttt{H5Z\_CLASS\_T\_VERS} to~2,
+          adding only the two new callback fields after the embedded base.
           A pointer to \texttt{H5Z\_class3\_t} can then be safely cast to
           \texttt{H5Z\_class2\_t~*}, resolving the strict-aliasing issue in both
           \texttt{H5Zregister()} and \texttt{H5PL\_\_open}.  However, accessing fields
