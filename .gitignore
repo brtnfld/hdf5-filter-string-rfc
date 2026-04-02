@@ -1,0 +1,30 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.log
+*.out
+*.run.xml
+*.toc
+*.synctex.gz
+_minted/
+
+# PDF (uncomment to exclude the built PDF)
+# *.pdf
+
+# Archives
+*.zip
+
+# Unreferenced source files
+H5Ocopy.c
+H5Oint.c
+rfc-pandoc-md.txt
+
+# Local Claude settings
+.claude/
