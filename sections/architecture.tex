@@ -845,16 +845,40 @@ callback to reconstruct a human-readable string from the stored \texttt{cd\_valu
 
 This reconstruction is inherently limited. The \texttt{cd\_values} encoding was
 designed to carry opaque integer data, not to serve as a lossless serialisation
-of a key-value string. For some filters (e.g., ZFP), the mapping from
-configuration string to \texttt{cd\_values} is not injective: distinct string
-representations may collapse to the same \texttt{cd\_values}, and the original
-string cannot be recovered. In the general case, \emph{exact round-tripping of
-the parameter string is not achievable without changing what is stored
-on-disk}---either by modifying the \texttt{cd\_values} encoding used by the filter
-or by changing the DCPL encoding for filter entries to retain the original
-string alongside the \texttt{cd\_values}. Consumers MUST NOT rely on exact string
+of a key-value string. For some filters (e.g., ZFP), floating-point
+configuration values are quantised during conversion to unsigned integers; the
+original floating-point value cannot be exactly recovered from the stored
+integer, and the reconstructed string will reflect the rounded value rather
+than what the user originally typed. Consumers MUST NOT rely on exact string
 equality between input and output, and SHOULD treat the reconstructed string
 as informational only.
+
+\noindent\colorbox{yellow!25}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+  \textbf{Open Design Decision --- On-disk storage of configuration:}
+  True round-tripping requires changing what is stored on-disk. Three
+  approaches are worth considering:
+  \begin{enumerate}
+    \item \textbf{Store the raw parameter string.} Simple to implement, but
+          potentially wasteful of space for long strings, and displays the
+          user's original input rather than the post-processing values
+          (e.g., a rounded rate) that the filter actually used.
+    \item \textbf{Store tokenized key-value pairs.} The library tokenizes the
+          string once and stores the key-value pairs directly in the pipeline
+          message. More compact than the raw string, and consistent with the
+          proposal that tokenization should be the library's responsibility
+          rather than each filter's. The stored pairs would reflect the
+          original input values, not the post-processing values.
+    \item \textbf{Store post-processing key-value pairs.} After the filter's
+          \texttt{set\_config} callback runs, the filter reports back the
+          effective key-value pairs (e.g., the rounded rate that was actually
+          applied). These are stored in the pipeline message. Tools like
+          \texttt{h5dump} would display what the filter actually used, not what
+          the user typed---arguably more useful, but requires a new callback
+          contract for filters to report their effective configuration.
+  \end{enumerate}
+  All three options require a format change. The group should decide whether
+  any of them is in scope for this RFC or should be deferred to a follow-on.
+}}
 
 \verysubsection{Note on \texttt{H5Pget\_filter2}}
 The existing \texttt{H5Pget\_filter2} function returns a
