@@ -1,0 +1,31 @@
+HDF5_RFC.tex
+  b440acbe977be964 28
+sections/implementation.tex
+  b440acbe977be964 212,216,261,266
+sections/architecture.tex
+  b440acbe977be964 68,83,306,311,335
+sections/testing.tex
+  b440acbe977be964 142,491-526
+support/rfc.bib
+  b440acbe977be964 1-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.6",
+  "base_commit_sha": "d0258c5bcb62a89bb98077a8ee5ba3e963d928f9",
+  "prompts": {
+    "b440acbe977be964": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ae704a71-2dab-48f2-bef1-90276cf1ee8b",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "M. Scot Breitenfeld",
+      "messages": [],
+      "total_additions": 91,
+      "total_deletions": 50,
+      "accepted_lines": 58,
+      "overriden_lines": 0
+    }
+  }
+}
