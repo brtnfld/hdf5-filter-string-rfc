@@ -139,8 +139,7 @@ entire pipelines in a single string be included in this release, or deferred?
 See \SectionRef{sec:pipeline-string} for the tradeoffs. Reviewer feedback
 strongly favors deferral, and this document recommends the same.
 
-\verysubsection{Q2. Filter names in the HDF Group registry
-  \textnormal{[Resolved: MUST be addressed before 1.0 release]}}
+\verysubsection{Q2. Filter names in the HDF Group registry}
 Canonical string names MUST be added to the HDF Group's external filter
 registry as a normative field before the first release that includes
 this feature. Without an authoritative name registry, independently
@@ -487,6 +486,42 @@ These tests require a thread-safe HDF5 build (\texttt{--enable-threadsafe}).
   (\SectionRef{sec:param-rules}) is rejected at \texttt{H5Zregister} time with
   \texttt{H5E\_BADVALUE}; the filter itself is NOT added to the filter table.
 \end{itemize}
+
+
+\subsection{CLI Integration Tests}
+\label{sec:test-cli}
+
+These tests verify the \texttt{h5repack} and \texttt{h5dump} integration described
+in \SectionRef{sec:cli-tools}.
+
+\begin{itemize}
+\item \texttt{cli-01} (\textbf{h5repack built-in filter}): Repack a file using the
+  new syntax \texttt{-f 'deflate=level=6'} and verify the output file is
+  byte-identical to one produced with the legacy \texttt{-f GZIP=6} syntax.
+\item \texttt{cli-02} (\textbf{h5repack plugin filter}): Repack using a v3 plugin
+  filter via \texttt{-f 'filtername=key=value'} and verify the dataset is
+  readable and the filter pipeline is correctly recorded.
+\item \texttt{cli-03} (\textbf{h5repack legacy syntax unchanged}): Verify that all
+  pre-existing \texttt{h5repack} filter syntax (\texttt{GZIP}, \texttt{SHUF},
+  \texttt{FLET}, \texttt{SOFF}, \texttt{UD=id,...}) produces output files
+  byte-identical to those produced by the pre-feature version.
+\item \texttt{cli-04} (\textbf{h5repack UD= disambiguation}): Verify that
+  \texttt{-f 'UD=32013,0,4,1,0,0,1074921472'} is treated as legacy user-defined
+  filter syntax and not as a filter named \texttt{UD} with parameters.
+\item \texttt{cli-05} (\textbf{h5dump -p PARAMS\_STRING for v3 filter}): Run
+  \texttt{h5dump -p} on a file containing a v3 filter and verify that a
+  \texttt{PARAMS\_STRING} line appears in the \texttt{FILTERS} block, containing
+  the output of the filter's \texttt{get\_config} callback enclosed in double
+  quotes.
+\item \texttt{cli-06} (\textbf{h5dump -p PARAMS\_STRING fallback for v2 filter}):
+  Run \texttt{h5dump -p} on a file containing a v2 filter and verify that the
+  \texttt{PARAMS\_STRING} line shows the colon-separated \texttt{cd\_values} fallback
+  (e.g., \texttt{"cd\_values=1:0:0:1074921472"}).
+\item \texttt{cli-07} (\textbf{h5dump default output unchanged}): Run \texttt{h5dump}
+  without \texttt{-p} and verify that no \texttt{PARAMS\_STRING} field appears in the
+  output.
+\end{itemize}
+
 
 
 %% ======================================================================

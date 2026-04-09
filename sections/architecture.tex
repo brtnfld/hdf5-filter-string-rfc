@@ -65,7 +65,7 @@ bare keys (boolean flags) and double-quote-delimited values.
   quoted value is preserved exactly as written (whitespace stripping applies
   only outside of quotes). A literal double quote within a quoted value is
   represented as two consecutive double quotes (\texttt{""}), following the
-  quoted-field escaping convention of RFC~4180. An unbalanced quote
+  quoted-field escaping convention of RFC~4180~\cite{rfc4180}. An unbalanced quote
   (opening \texttt{"} with no closing \texttt{"}) MUST cause the parser to return
   \texttt{H5E\_BADVALUE} rather than silently consuming the rest of the string.
 \item \textbf{Order of operations for parsing:} split the parameter string on commas
@@ -80,7 +80,7 @@ bare keys (boolean flags) and double-quote-delimited values.
   Allowing commas and equals signs inside quoted values requires a stateful
   parser that tracks quoted regions before splitting on delimiters; simple
   \texttt{strtok()}-based parsing is not sufficient.
-  Before finalising this design, the group should decide:
+  Before finalizing this design, the group should decide:
   \begin{enumerate}
     \item Do any realistic parameter values actually contain commas or equals
           signs?  If not, those characters could be \emph{prohibited} inside
@@ -303,12 +303,12 @@ No assumption is made about what that value will be.
 This MUST be extended to also recognise \texttt{H5Z\_CLASS3\_T\_VERS} within the
 \texttt{version != H5Z\_CLASS\_T\_VERS} branch, before falling back to the legacy path:
 
-\begin{verbatim}
+\begin{minted}[fontsize=\scriptsize]{text}
     if (version != H5Z_CLASS_T_VERS) {
         if (version == H5Z_CLASS3_T_VERS) -> H5Z_class3_t
         else                              -> legacy H5Z_class1_t
     } else -> H5Z_class2_t
-\end{verbatim}
+\end{minted}
 
 Note: When \texttt{H5\_NO\_DEPRECATED\_SYMBOLS} is defined, the legacy
 \texttt{H5Z\_class1\_t} path is compiled out entirely and any
@@ -332,7 +332,7 @@ returned by the plugin to \texttt{H5Z\_class2\_t~*} unconditionally.  For a plug
 that returns an \texttt{H5Z\_class3\_t}, this cast is technically undefined behavior,
 and the library would subsequently access fields beyond the end of what it
 believes to be an \texttt{H5Z\_class2\_t}.  This RFC does not currently discuss
-\texttt{H5PL\_\_open}; that omission must be addressed before the design is finalised.
+\texttt{H5PL\_\_open}; that omission must be addressed before the design is finalized.
 
 Two code paths are affected and may warrant different remedies:
 

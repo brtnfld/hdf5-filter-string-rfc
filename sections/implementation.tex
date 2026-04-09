@@ -209,11 +209,11 @@ existing syntax (\texttt{GZIP}, \texttt{SZIP}, \texttt{SHUF}, \texttt{FLET}, \te
 
 A new form is added that accepts a filter name and parameter string:
 
-\begin{Verbatim}[fontsize=\scriptsize]
+\begin{minted}[fontsize=\scriptsize,breaklines]{bash}
     h5repack -f 'deflate=level=6' input.h5 output.h5
     h5repack -f 'zfp=mode=rate,rate=3.5' input.h5 output.h5
     h5repack -f '/group/dataset:zfp=mode=rate,rate=3.5' input.h5 output.h5
-\end{Verbatim}
+\end{minted}
 
 The equals sign is used as the delimiter between filter name and parameter
 string. A colon cannot be used because it is already the separator between the
@@ -258,12 +258,12 @@ implements \texttt{get\_config}, a \texttt{PARAMS\_STRING} line is appended imme
 after the existing filter line, indented to the same level as other filter
 sub-fields:
 
-\begin{verbatim}
+\begin{minted}[fontsize=\scriptsize]{text}
     FILTERS {
       COMPRESSION DEFLATE { LEVEL 6 }
       PARAMS_STRING "level=6"
     }
-\end{verbatim}
+\end{minted}
 
 The value is the literal output of \texttt{get\_config} enclosed in double quotes.
 If the string returned by \texttt{get\_config} contains a double-quote character,
